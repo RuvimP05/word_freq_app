@@ -66,7 +66,8 @@ impl Sandbox for Application {
                         .fold(HashMap::new(), |mut counts, word| {
                             *counts.entry(word.to_string()).or_insert(0) += 1;
                             counts
-                        });
+                        } );
+
             }
             Message::TextInputChanged(letter) => {
                 self.input = letter;
@@ -107,14 +108,14 @@ impl Sandbox for Application {
             .on_press(Message::Calculate)
             .padding(15);
 
-        let counts = self
-            .counts
-            .iter()
-            .fold(Column::new(), |column, (word, count)| {
-                column
-                    .push(Text::new(format!("{}: {}", word, count)))
-                    .padding(15)
-            });
+        let mut ordered_counts: Vec<(&String, &u32)> = self.counts.iter().collect();
+        ordered_counts.sort_by(|a, b| b.1.cmp(a.1));
+
+        let counts = ordered_counts.iter().fold(Column::new(), |column, (word, count)| {
+            column
+                .push(Text::new(format!("{}: {}", word, count)))
+                .padding(15)
+        });
 
         let col = Column::new()
             .push(choose_theme)
