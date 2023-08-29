@@ -69,7 +69,6 @@ impl Sandbox for Application {
                         });
             }
             Message::TextInputChanged(letter) => {
-                //tracks input within textbox
                 self.input = letter;
             }
         }
@@ -110,7 +109,7 @@ impl Sandbox for Application {
 
         let counts = self
             .counts
-            .iter() //creates column of the results
+            .iter()
             .fold(Column::new(), |column, (word, count)| {
                 column
                     .push(Text::new(format!("{}: {}", word, count)))
